@@ -7,5 +7,5 @@ After cleaning the data, the main goal is to create a machine learning model (li
 scoring of the show and its reviews.
 
 
-# Currently Problem
-I had trouble uploading my video still trying to figure it out. Currently rerecording it using a different software to see if that works.
+# Video
+https://mediaspace.wisconsin.edu/media/1_afyhu10o
