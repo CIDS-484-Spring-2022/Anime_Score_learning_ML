@@ -32,27 +32,35 @@ driver.get("https://myanimelist.net/topanime.php?limit=0")
 
 
 
+#Enter the number of pages you want to scrape
+
+Num_pages = 20
 
 
 
-
+#Opens a csv file to write to
 with open('malData.csv','w',newline='') as f:
-    
+    #Makes the column names
     fieldnames = ['Title','Score','Episode_count','Popularity','Studio','Source','Premiered','Members']
     thewriter = csv.DictWriter(f,fieldnames=fieldnames)
-    for x in range(20):
-        
+    
+    #Sets the loop to scrape each page up to the Num_pages
+    for x in range(Num_pages):
+        #Finds the next page button for the first page since it is different than every other page
         if x == 1:
             first_next_btn = driver.find_element_by_xpath("/html/body/div[1]/div[2]/div[3]/div[2]/div[4]/h2/span[1]/a")
             first_next_btn.click()
+        #Finds the next page button for every page but the first one
         elif x > 1:
             next_btn = driver.find_element_by_xpath("/html/body/div[1]/div[2]/div[3]/div[2]/div[4]/h2/span[1]/a[2]")
             next_btn.click()
 
+        #Finds the table for the 50 shows listed
         table = driver.find_element_by_class_name("top-ranking-table")
+        #Creates a list of each show in the variable anime
         anime = table.find_elements_by_class_name("ranking-list")        
             
-            
+        #For each show it will click on its link and open it in a new tab to scrape from  
         for anime in anime:
             #Clicks on elements href to bring up the anime's page
             time.sleep(1)
@@ -62,6 +70,7 @@ with open('malData.csv','w',newline='') as f:
             driver.switch_to.window(driver.window_handles[1])
             driver.get(url)
             
+            #Trys to find each element and record them in a variable to be put into a csv. Will set it to None if it does not exist
             try:
                 #gets score, also waits for page to load
                 score = WebDriverWait(driver, 10).until(
