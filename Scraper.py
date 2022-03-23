@@ -29,6 +29,7 @@ source_path="//*[text()='Source:']"
 PATH = "C:/Users/starm/Desktop/Anime_Score_learning_ML/Anime_Score_learning_ML/chromedriver.exe"
 driver = webdriver.Chrome(PATH)
 driver.get("https://myanimelist.net/topanime.php?limit=0")
+original_window = driver.current_window_handle
 
 
 
@@ -36,6 +37,7 @@ driver.get("https://myanimelist.net/topanime.php?limit=0")
 
 Num_pages = 20
 
+next_btn = [None] * Num_pages
 
 
 #Opens a csv file to write to
@@ -46,29 +48,56 @@ with open('malData.csv','w',newline='') as f:
     
     #Sets the loop to scrape each page up to the Num_pages
     for x in range(Num_pages):
+
         #Finds the next page button for the first page since it is different than every other page
         if x == 1:
             first_next_btn = driver.find_element_by_xpath("/html/body/div[1]/div[2]/div[3]/div[2]/div[4]/h2/span[1]/a")
             first_next_btn.click()
         #Finds the next page button for every page but the first one
         elif x > 1:
-            next_btn = driver.find_element_by_xpath("/html/body/div[1]/div[2]/div[3]/div[2]/div[4]/h2/span[1]/a[2]")
-            next_btn.click()
+            next_btn[x] = driver.find_element_by_id('contentWrapper')
+            next_btn[x] = next_btn[x].find_element_by_xpath("//a[@class='link-blue-box next']")
+            #next_btn[x] = driver.find_element_by_xpath("/html/body/div[1]/div[2]/div[3]/div[2]/div[4]/h2/span[1]/a[2]")
+            next_btn[x].click()
 
         #Finds the table for the 50 shows listed
         table = driver.find_element_by_class_name("top-ranking-table")
         #Creates a list of each show in the variable anime
-        anime = table.find_elements_by_class_name("ranking-list")        
-            
-        #For each show it will click on its link and open it in a new tab to scrape from  
+        anime = table.find_elements_by_class_name("ranking-list")
+        
+        
+        url = [None] * 50
+        y = 0
         for anime in anime:
+            url[y] = anime.find_element_by_xpath("td[2]/div/div[2]/h3/a").get_attribute('href')
+            y = y+1
+        
+        #For each show it will click on its link and open it in a new tab to scrape from  
+        for url in url:
+            time.sleep(1)
             #Clicks on elements href to bring up the anime's page
-            time.sleep(1)
-            url = anime.find_element_by_xpath("td[2]/div/div[2]/h3/a").get_attribute('href')
+           #animeLink = anime.find_element_by_xpath("//td[@class='title al va-t word-break']")
+          # animeHref = animeLink.find_element_by_xpath("./child::*")
+           #url = animeHref.get_attribute('href')
+            
+            #url = WebDriverWait(anime, 10).until(
+                #EC.presence_of_element_located((By.XPATH, "td[2]/div/div[2]/h3/a")))
+            #url = url.get_attribute('href')
+            
             driver.execute_script("window.open('');")
-            time.sleep(1)
+            #time.sleep(1)
             driver.switch_to.window(driver.window_handles[1])
             driver.get(url)
+            
+            
+            score = None
+            title = None
+            episodeCount_child = None
+            premiered_child = None
+            studio_child = None
+            source_child = None
+            member_child = None
+            
             
             #Trys to find each element and record them in a variable to be put into a csv. Will set it to None if it does not exist
             try:
@@ -76,8 +105,13 @@ with open('malData.csv','w',newline='') as f:
                 score = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.XPATH, score_path)))
                 score_value = score.text
+                
+                #Gets Title of the Show
+                content = driver.find_element_by_id('contentWrapper')
+                title = content.find_element_by_xpath("//div[@itemprop='name']")
+                titleClean = title.text.encode("ascii", "ignore")
+ 
                 #Searches for episode count
-                title = driver.find_element_by_xpath("/html/body/div[1]/div[2]/div[3]/div[1]/div/div[1]/div/h1/strong")
                 try:
                     episodeCount_child = driver.find_element_by_xpath(episodeCount_path)
                     episodeCount = episodeCount_child.find_element_by_xpath("..")
@@ -118,14 +152,14 @@ with open('malData.csv','w',newline='') as f:
                     members_value = None
                 
             finally:
-                thewriter.writerow({'Title' : title,'Score' : score_value,'Episode_count' : episodeCount_value,'Studio' : studio_value,'Source' : source_value,'Premiered' : premiered_value,'Members' : members_value})
-                time.sleep(1)
+                thewriter.writerow({'Title' : titleClean,'Score' : score_value,'Episode_count' : episodeCount_value,'Studio' : studio_value,'Source' : source_value,'Premiered' : premiered_value,'Members' : members_value})
+                #time.sleep(1)
+                #driver.switch_to.window(driver.window_handles[1])
                 driver.close()
-                driver.switch_to.window(driver.window_handles[0])
+                driver.switch_to.window(original_window)
 
             
 
-               
     
 
 
