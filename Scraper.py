@@ -24,18 +24,19 @@ episodeCount_path= "//*[text()='Episodes:']"
 premiered_path= "//*[text()='Premiered:']"
 studio_path= "//*[text()='Studios:']"
 source_path="//*[text()='Source:']"
+favorites_path="//*[text()='Favorites:']"
 
 
 PATH = "C:/Users/starm/Desktop/Anime_Score_learning_ML/Anime_Score_learning_ML/chromedriver.exe"
 driver = webdriver.Chrome(PATH)
-driver.get("https://myanimelist.net/topanime.php?limit=0")
+driver.get("https://myanimelist.net/topanime.php?limit=900")
 original_window = driver.current_window_handle
 
 
 
 #Enter the number of pages you want to scrape
 
-Num_pages = 20
+Num_pages = 200
 
 next_btn = [None] * Num_pages
 
@@ -43,7 +44,7 @@ next_btn = [None] * Num_pages
 #Opens a csv file to write to
 with open('malData.csv','w',newline='') as f:
     #Makes the column names
-    fieldnames = ['Title','Score','Episode_count','Popularity','Studio','Source','Premiered','Members']
+    fieldnames = ['Title','Score','Episode_count','Studio','Source','Premiered','Members','Favorites','Popularity']
     thewriter = csv.DictWriter(f,fieldnames=fieldnames)
     
     #Sets the loop to scrape each page up to the Num_pages
@@ -51,7 +52,8 @@ with open('malData.csv','w',newline='') as f:
 
         #Finds the next page button for the first page since it is different than every other page
         if x == 1:
-            first_next_btn = driver.find_element_by_xpath("/html/body/div[1]/div[2]/div[3]/div[2]/div[4]/h2/span[1]/a")
+            first_next_btn = driver.find_element_by_xpath("//a[@class='link-blue-box next']")
+            #first_next_btn = driver.find_element_by_xpath("/html/body/div[1]/div[2]/div[3]/div[2]/div[4]/h2/span[1]/a")
             first_next_btn.click()
         #Finds the next page button for every page but the first one
         elif x > 1:
@@ -75,17 +77,8 @@ with open('malData.csv','w',newline='') as f:
         #For each show it will click on its link and open it in a new tab to scrape from  
         for url in url:
             time.sleep(1)
-            #Clicks on elements href to bring up the anime's page
-           #animeLink = anime.find_element_by_xpath("//td[@class='title al va-t word-break']")
-          # animeHref = animeLink.find_element_by_xpath("./child::*")
-           #url = animeHref.get_attribute('href')
-            
-            #url = WebDriverWait(anime, 10).until(
-                #EC.presence_of_element_located((By.XPATH, "td[2]/div/div[2]/h3/a")))
-            #url = url.get_attribute('href')
             
             driver.execute_script("window.open('');")
-            #time.sleep(1)
             driver.switch_to.window(driver.window_handles[1])
             driver.get(url)
             
@@ -97,7 +90,7 @@ with open('malData.csv','w',newline='') as f:
             studio_child = None
             source_child = None
             member_child = None
-            
+            popularity_value = None
             
             #Trys to find each element and record them in a variable to be put into a csv. Will set it to None if it does not exist
             try:
@@ -115,44 +108,53 @@ with open('malData.csv','w',newline='') as f:
                 try:
                     episodeCount_child = driver.find_element_by_xpath(episodeCount_path)
                     episodeCount = episodeCount_child.find_element_by_xpath("..")
-                    episodeCount_value = episodeCount.text
+                    episodeCount_value = episodeCount.text.encode("ascii", "ignore")
                 except NoSuchElementException:
                     episodeCount_value = None
                 #Searches for Premiered
                 try:
                     premiered_child = driver.find_element_by_xpath(premiered_path)
                     premiered = premiered_child.find_element_by_xpath("..")
-                    premiered_value = premiered.text
+                    premiered_value = premiered.text.encode("ascii", "ignore")
                 except NoSuchElementException:
                     premiered_value = None
                 #Searches for Studio
                 try:
                     studio_child = driver.find_element_by_xpath(studio_path)
                     studio = studio_child.find_element_by_xpath("..")
-                    studio_value = studio.text
+                    studio_value = studio.text.encode("ascii", "ignore")
                 except NoSuchElementException:
                     studio_value = None
                 #Searches for source
                 try:
                     source_child = driver.find_element_by_xpath(source_path)
                     source = source_child.find_element_by_xpath("..")
-                    source_value = source.text
+                    source_value = source.text.encode("ascii", "ignore")
                 except NoSuchElementException:
                     source_value = None
                 #Searches for popularity
-                    #popularity= driver.find_element_by_xpath("/html/body/div[1]/div[2]/div[3]/div[2]/table/tbody/tr/td[2]/div[1]/table/tbody/tr[1]/td/div[1]/div[1]/div[1]/div[1]/div[2]/span[2]/strong")
-                   # popularity_value = popularity.text
-                   # print(popularity.text)
+                try:
+                    popularity_child = driver.find_element_by_xpath(popularity_path)
+                    popularity = popularity_child.find_element_by_xpath("..")
+                    popularity_value = popularity.text.encode("ascii", "ignore")
+                except NoSuchElementException:
+                    popularity_value = None
                 #Searches for members
                 try:
                     members_child = driver.find_element_by_xpath(members_path)
                     members = members_child.find_element_by_xpath("..")
-                    members_value = members.text
+                    members_value = members.text.encode("ascii", "ignore")
                 except NoSuchElementException:
                     members_value = None
+                try:
+                     favorites_child = driver.find_element_by_xpath(favorites_path)
+                     favorites = favorites_child.find_element_by_xpath("..")
+                     favorites_value = favorites.text.encode("ascii", "ignore")
+                except NoSuchElementException:
+                     favorites_value = None   
                 
             finally:
-                thewriter.writerow({'Title' : titleClean,'Score' : score_value,'Episode_count' : episodeCount_value,'Studio' : studio_value,'Source' : source_value,'Premiered' : premiered_value,'Members' : members_value})
+                thewriter.writerow({'Title' : titleClean,'Score' : score_value,'Episode_count' : episodeCount_value, 'Studio' : studio_value,'Source' : source_value,'Premiered' : premiered_value,'Members' : members_value,'Favorites' : favorites_value,'Popularity': popularity_value,})
                 #time.sleep(1)
                 #driver.switch_to.window(driver.window_handles[1])
                 driver.close()
