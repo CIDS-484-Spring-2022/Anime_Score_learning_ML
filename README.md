@@ -25,9 +25,9 @@ The first one is the general dashboard, followed by the 2020 only data, and then
 After doing some surface level data analysis in Tableau, some data visualization was done using seaborn and matplotlib packages in python.
 <br>
 Then a linear regression model was built to predict the tv show's score on Myanimelist.net
-![](Images/Capture4.png)
-![](Images/Capture5.png)
-![](Images/Capture6.png)
+![](Images/Capture4.PNG)
+![](Images/Capture5.PNG)
+![](Images/Capture6.PNG)
 
 The final result being a r-score of 0.913
 
