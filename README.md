@@ -17,9 +17,19 @@ score, rating, rank, popularity, members, episode count, premiered, studio, and 
 Here are some Taleau Dashboards that were made for some surface level data analysis and visualization.
 <br>
 The first one is the general dashboard, followed by the 2020 only data, and then only the top ranked show.
-![](Images/Capture1.PNG)
-![](Images/Capture2.PNG)
-![](Images/Capture3.PNG)
+![](Images/Capture1.png)
+![](Images/Capture2.png)
+![](Images/Capture3.png)
+
+# Linear Regression
+After doing some surface level data analysis in Tableau, some data visualization was done using seaborn and matplotlib packages in python.
+<br>
+Then a linear regression model was built to predict the tv show's score on Myanimelist.net
+![](Images/Capture4.png)
+![](Images/Capture5.png)
+![](Images/Capture6.png)
+
+The final result being a r-score of 0.913
 
 # Video
 Milestone 1
