@@ -33,6 +33,13 @@ The final result being a r-score of 0.912
 
 # Video
 Milestone 1
+<br>
 https://mediaspace.wisconsin.edu/media/1_afyhu10o
+<br>
 Milestone 2
+<br>
 https://mediaspace.wisconsin.edu/media/Kaltura+Capture+recording+-+March+23rd+2022%2C+4A19A36+pm/1_9l51wtki
+<br>
+Milestone 3
+<br>
+https://mediaspace.wisconsin.edu/media/Kaltura+Capture+recording+-+April+26th+2022%2C+1A37A41+pm/1_czxvxo62
