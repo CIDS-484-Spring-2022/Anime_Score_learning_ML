@@ -13,11 +13,13 @@ To change the number of pages scraped just change Num_pages on line 38 to the de
 Currently Scraping;
 score, rating, rank, popularity, members, episode count, premiered, studio, and source material.
 
-# Next Steps
-Clean the data to make it easier to read and analysis.
-Start doing some basic visualization.
-State linear Regression on data.
-
+# Tableau Dashboard
+Here are some Taleau Dashboards that were made for some surface level data analysis and visualization.
+<br>
+The first one is the general dashboard, followed by the 2020 only data, and then only the top ranked show.
+![](Images/Capture1.PNG)
+![](Images/Capture2.PNG)
+![](Images/Capture3.PNG)
 
 # Video
 Milestone 1
