@@ -29,7 +29,7 @@ Then a linear regression model was built to predict the tv show's score on Myani
 ![](Images/Capture5.PNG)
 ![](Images/Capture6.PNG)
 
-The final result being a r-score of 0.913
+The final result being a r-score of 0.912
 
 # Video
 Milestone 1
