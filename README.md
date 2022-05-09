@@ -1,5 +1,7 @@
 # Anime_Score_learning_ML
 Capstone project, for Machine learning anime review scores
+<br>
+note: Video's are at the bottom of the README
 
 # Overview
 The main goal for this project is to scrap data using a python we scraper like beautiful soup to scrap information from the website https://myanimelist.net/.
@@ -43,3 +45,6 @@ https://mediaspace.wisconsin.edu/media/1_9l51wtki
 Milestone 3
 <br>
 https://mediaspace.wisconsin.edu/media/1_czxvxo62
+Final Video
+<br>
+https://mediaspace.wisconsin.edu/media/1_pt9wiv32?
